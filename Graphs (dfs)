@@ -1,0 +1,39 @@
+class Graph:  # Define a class for the graph
+    def __init__(self):  # Initialize the graph object
+        self.graph = {}  # Create an empty dictionary to store adjacency list
+
+    def insert_list(self, v, e):  # Method to add an edge from vertex v to vertex e
+        if v not in self.graph:  # If vertex v is not in the graph
+            self.graph[v] = [e]  # Create a new list with e as the first neighbor
+        else:
+            self.graph[v].append(e)  # Append e to the adjacency list of v
+
+    def dfs(self, start):  # Method to perform DFS traversal from a starting vertex
+        queue = [start]  # Initialize a stack (list) with the starting vertex
+        visited = []  # List to keep track of visited vertices
+        while queue:  # Continue until the stack is empty
+            cur = queue.pop()  # Pop a vertex from the stack
+            if cur not in visited:  # If the vertex has not been visited
+                visited.append(cur)  # Mark it as visited
+                queue.extend(self.graph[cur])  # Add all adjacent vertices to the stack
+        print(visited)  # Print the order of visited vertices
+
+obj = Graph()  # Create a new Graph object
+obj.insert_list("B", "T")  # Add edge B-T
+obj.insert_list("T", "B")  # Add edge T-B
+obj.insert_list("B", "P")  # Add edge B-P
+obj.insert_list("P", "B")  # Add edge P-B
+obj.insert_list("B", "D")  # Add edge B-D
+obj.insert_list("D", "B")  # Add edge D-B
+obj.insert_list("P", "D")  # Add edge P-D
+obj.insert_list("D", "P")  # Add edge D-P
+obj.insert_list("T", "D")  # Add edge T-D
+obj.insert_list("D", "T")  # Add edge D-T
+obj.insert_list("D", "G")  # Add edge D-G
+obj.insert_list("G", "D")  # Add edge G-D
+obj.insert_list("D", "K")  # Add edge D-K
+obj.insert_list("K", "D")  # Add edge K-D
+obj.insert_list("K", "L")  # Add edge K-L
+obj.insert_list("L", "K")  # Add edge L-K
+print(obj.graph)  # Print the adjacency list representation of the graph
+obj.dfs("B")  # Perform DFS traversal starting from vertex B
