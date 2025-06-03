@@ -1,0 +1,127 @@
+class Node:  # Define a class for a node in the binary search tree
+    def __init__(self, data):  # Initialize the node with data
+        self.data = data       # Store the data in the node
+        self.left = None       # Pointer to the left child (initially None)
+        self.right = None      # Pointer to the right child (initially None)
+
+class bst:  # Define a class for the binary search tree
+    def __init__(self):        # Initialize the BST
+        self.root = None       # Set root to None (empty tree)
+
+    def insert(self, data):    # Insert a node with the given data
+        self.root = self.rec_insert(self.root, data)  # Call recursive insert
+
+    def rec_insert(self, root, data):  # Recursive function to insert a node
+        if root is None:               # If current node is None
+            return Node(data)          # Create and return a new node
+        if root.data > data:           # If data is less than current node's data
+            root.left = self.rec_insert(root.left, data)  # Insert in left subtree
+        else:                          # If data is greater or equal
+            root.right = self.rec_insert(root.right, data)  # Insert in right subtree
+        return root                    # Return the (possibly updated) node
+
+    def inorder(self):  # Public method to perform inorder traversal
+        def rec_inorder(root):  # Helper recursive function
+            if root:  # If node exists
+                rec_inorder(root.left)  # Traverse left subtree
+                print(root.data, end=" ")  # Print node's data
+                rec_inorder(root.right)  # Traverse right subtree
+        rec_inorder(self.root)  # Start traversal from root
+
+    def sum(self, root):  # Calculate sum of all nodes in the tree
+        if not root:      # If node is None
+            return 0      # Return 0
+        return root.data + self.sum(root.left) + self.sum(root.right)  # Sum current node and subtrees
+
+    
+    
+    def count(self, root):  # Count total nodes in the tree
+        if not root:        # If node is None
+            return 0        # Return 0
+        return 1 + self.count(root.left) + self.count(root.right)  # Count current node and subtrees
+
+    
+    def height(self, root):  # Calculate height of the tree
+        if not root:         # If node is None
+            return 0         # Return 0
+        return 1 + max(self.height(root.left), self.height(root.right))  # Height is 1 + max of subtrees
+
+    
+    def left_sum(self, root):  # Calculate sum of all left children
+        if root is None:       # If node is None
+            return 0           # Return 0
+        total = 0              # Initialize total
+        if root.left:          # If left child exists
+            total += root.left.data  # Add left child's data
+        total += self.left_sum(root.left)   # Add sum from left subtree
+        total += self.left_sum(root.right)  # Add sum from right subtree
+        return total           # Return total sum
+
+    
+    def right_sum(self, root):  # Calculate sum of all right children
+        if root is None:        # If node is None
+            return 0            # Return 0
+        rightsum = self.sum(root) - self.root.data - self.left_sum(root)  # Calculate right sum
+        return rightsum         # Return right sum
+
+    
+    def min(self, root):  # Find minimum value in the tree
+        if root is None:  # If tree is empty
+            print("no data")  # Print message
+        while root.left:  # Traverse to the leftmost node
+            root = root.left
+        return root.data  # Return minimum value
+
+    
+    def max(self, root):  # Find maximum value in the tree
+        if root is None:  # If tree is empty
+            print("no data")  # Print message
+        while root.right:  # Traverse to the rightmost node
+            root = root.right
+        return root.data  # Return maximum value
+
+    
+    def find(self, root, key):  # Search for a node with the given key
+        if root is None or root.data == key:  # If node is None or found
+            return root  # Return node
+        if key < root.data:  # If key is less than current node's data
+            return self.find(root.left, key)  # Search in left subtree
+        else:  # If key is greater
+            return self.find(root.right, key)  # Search in right subtree
+
+    
+    def delete(self, key):  # Public method to delete a node
+        self.root = self.rec_delete(self.root, key)  # Call recursive delete
+
+    def rec_delete(self, root, key):  # Recursive function to delete a node
+        if root:  # If node exists
+            if root.data > key:  # If key is less than node's data
+                root.left = self.rec_delete(root.left, key)  # Delete from left subtree
+            elif root.data < key:  # If key is greater than node's data
+                root.right = self.rec_delete(root.right, key)  # Delete from right subtree
+            else:  # Node to be deleted found
+                if root.left is None:  # If no left child
+                    return root.right  # Replace node with right child
+                elif root.right is None:  # If no right child
+                    return root.left  # Replace node with left child
+                max_val = self.max(root.left)  # Find max value in left subtree
+                root.data = max_val  # Replace node's data with max value
+                self.rec_delete(root.left, max_val)  # Delete the duplicate node
+            return root  # Return the (possibly updated) node
+
+
+obj = bst()           # Create a new BST object
+obj.insert(25)        # Insert 25
+obj.insert(60)        # Insert 60
+obj.insert(70)        # Insert 70
+obj.insert(6)         # Insert 6
+obj.insert(4)         # Insert 4
+obj.insert(30)        # Insert 30
+obj.insert(29)        # Insert 29
+obj.insert(10)        # Insert 10
+obj.insert(40)        # Insert 40
+obj.insert(5)         # Insert 5
+obj.inorder()         # Print inorder traversal
+print()               # Print newline
+obj.delete(6)         # Delete node with value 6
+obj.inorder()         # Print inorder traversal again
