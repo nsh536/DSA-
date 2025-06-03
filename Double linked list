@@ -1,0 +1,138 @@
+class Node:  # Define a class for a node in the doubly linked list
+    def __init__(self, data):  # Initialize the node with data
+        self.data = data       # Store the data in the node
+        self.next = None       # Pointer to the next node (initially None)
+        self.prev = None       # Pointer to the previous node (initially None)
+
+class Double_linkedlist:  # Define a class for the doubly linked list
+    def __init__(self):   # Initialize the doubly linked list
+        self.head = self.tail = None  # Set head and tail to None (empty list)
+
+    def b_insert(self, data):  # Insert a node at the beginning
+        newnode = Node(data)   # Create a new node with the given data
+        if self.head is None:  # If the list is empty
+            self.head = self.tail = newnode  # Set head and tail to the new node
+            return
+        newnode.next = self.head  # Point new node's next to current head
+        self.head.prev = newnode  # Point current head's prev to new node
+        self.head = newnode       # Update head to the new node
+
+    def e_insert(self, data):  # Insert a node at the end
+        newnode = Node(data)   # Create a new node with the given data
+        if self.head is None:  # If the list is empty
+            self.head = self.tail = newnode  # Set head and tail to the new node
+            return
+        newnode.prev = self.tail  # Point new node's prev to current tail
+        self.tail.next = newnode  # Point current tail's next to new node
+        self.tail = newnode       # Update tail to the new node
+
+    def forward_display(self):  # Display the list from head to tail
+        if self.head is None:   # If the list is empty
+            print("empty")      # Print "empty"
+            return
+        cur = self.head         # Start from the head
+        while cur:              # Traverse until the end
+            print(cur.data, end="->")  # Print current node's data
+            cur = cur.next      # Move to the next node
+
+    def backward_display(self):  # Display the list from tail to head
+        if self.head is None:    # If the list is empty
+            print("empty")       # Print "empty"
+            return
+        cur = self.tail          # Start from the tail
+        while cur:               # Traverse until the start
+            print(cur.data, end="->")  # Print current node's data
+            cur = cur.prev       # Move to the previous node
+
+    def b_delete(self):  # Delete a node from the beginning
+        if self.head == self.tail:  # If only one node exists
+            self.head = self.tail = None  # Set head and tail to None
+        if self.head:               # If the list is not empty
+            self.head = self.head.next  # Move head to the next node
+            self.head.prev = None      # Set new head's prev to None
+
+    def e_delete(self):  # Delete a node from the end
+        if self.head == self.tail:  # If only one node exists
+            self.head = self.tail = None  # Set head and tail to None
+        if self.tail:               # If the list is not empty
+            self.tail = self.tail.prev  # Move tail to the previous node
+            self.tail.next = None       # Set new tail's next to None
+
+    def position(self, pos):  # Get the node at a specific position (1-based)
+        cur = self.head       # Start from the head
+        for i in range(pos - 1):  # Move to the (pos-1)th node
+            if cur.next is None:  # If next node does not exist
+                break
+            cur = cur.next        # Move to the next node
+        else:
+            return cur            # Return the node at the position
+
+    def position_insert(self, data, pos):  # Insert a node at a specific position
+        if pos == 1:              # If position is 1
+            self.b_insert(data)   # Insert at the beginning
+            return
+        cur = self.position(pos)  # Get the node at the position
+        # if cur == self.tail:
+        #     self.e_insert(data)
+        #     return
+        newnode = Node(data)      # Create a new node
+        if cur:                   # If the position exists
+            newnode.next = cur        # Set new node's next to current node
+            newnode.prev = cur.prev   # Set new node's prev to current node's prev
+            cur.prev = newnode.prev.next = newnode  # Update pointers to insert new node
+
+    def position_delete(self, pos):  # Delete a node at a specific position
+        if pos == 1:                 # If position is 1
+            self.b_delete()          # Delete from the beginning
+            return
+        cur = self.position(pos)     # Get the node at the position
+        if cur == self.tail:         # If node is the tail
+            self.e_delete()          # Delete from the end
+            return
+        if cur:                      # If the position exists
+            cur.next.prev = cur.prev     # Update next node's prev pointer
+            cur.prev.next = cur.next     # Update prev node's next pointer
+            cur.prev = cur.next = None   # Remove current node's pointers
+
+# Example usage:
+obj = Double_linkedlist()  # Create a new doubly linked list object
+obj.e_insert(6)            # Insert 6 at the end
+obj.e_insert(10)           # Insert 10 at the end
+obj.e_insert(30)           # Insert 30 at the end
+obj.b_insert(5)            # Insert 5 at the beginning
+obj.forward_display()      # Display list from head to tail
+print()
+obj.backward_display()     # Display list from tail to head
+obj.position_delete(2)     # Delete node at position 2
+print()
+obj.forward_display()      # Display list from head to tail
+print()
+obj.backward_display()     # Display list from tail to head
+
+
+
+# This code implements a doubly linked list with various operations such as inserting and deleting nodes at both ends and at specific positions.
+# It defines a `Node` class to represent each node in the list and a `Double_linkedlist` class to manage the linked list operations.        
+# The operations include:
+# - `b_insert`: Insert a node at the beginning of the list.
+# - `e_insert`: Insert a node at the end of the list.
+# - `forward_display`: Display the list from head to tail.
+# - `backward_display`: Display the list from tail to head.
+# - `b_delete`: Delete a node from the beginning of the list.
+# - `e_delete`: Delete a node from the end of the list.
+# - `position`: Get the node at a specific position.
+# - `position_insert`: Insert a node at a specific position.
+# - `position_delete`: Delete a node at a specific position.
+# The example usage demonstrates how to create a doubly linked list, insert nodes, display the list in both directions, and delete nodes at specific positions.
+# Example usage:
+# obj = Double_linkedlist()
+# obj.e_insert(6)
+# obj.e_insert(10)
+# obj.e_insert(30) 
+# obj.b_insert(5)
+# obj.forward_display()  # Output: 5->6->10->30->
+# obj.backward_display() # Output: 30->10->6->5->
+# obj.position_delete(2)  # Deletes the node at position 2 (which is 6)
+# obj.forward_display()  # Output: 5->10->30->
+# obj.backward_display() # Output: 30->10->5->
+# This code provides a comprehensive implementation of a doubly linked list with various operations, allowing for efficient insertion and deletion of nodes at both ends and at specific positions.
