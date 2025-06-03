@@ -1,0 +1,79 @@
+class Node:  # Define a class for a node in the singly linked list
+    def __init__(self, data):  # Initialize the node with data
+        self.data = data       # Store the data in the node
+        self.next = None       # Pointer to the next node (initially None)
+
+class Linked_list:  # Define a class for the singly linked list
+    def __init__(self):        # Initialize the linked list
+        self.head = None       # Set head to None (empty list)
+
+    def b_insert(self, data):  # Insert a node at the beginning
+        newnode = Node(data)   # Create a new node with the given data
+        newnode.next = self.head  # Point new node's next to current head
+        self.head = newnode       # Update head to the new node
+
+    def e_insert(self, data):  # Insert a node at the end
+        newnode = Node(data)   # Create a new node with the given data
+        if self.head is None:  # If the list is empty
+            self.head = newnode   # Set head to the new node
+            return
+        cur = self.head        # Start from the head
+        while cur.next:        # Traverse to the last node
+            cur = cur.next
+        cur.next = newnode     # Set last node's next to new node
+
+    def e_delete(self):        # Delete a node from the end
+        if self.head is None or self.head.next is None:  # If list is empty or has one node
+            self.head = None   # Set head to None
+            return
+        cur = self.head        # Start from the head
+        while cur.next.next:   # Traverse to the second last node
+            cur = cur.next
+        cur.next = None        # Remove reference to the last node
+
+    def b_delete(self):        # Delete a node from the beginning
+        if self.head:          # If the list is not empty
+            self.head = self.head.next  # Move head to the next node
+
+    def position(self, pos):   # Get the node at a specific position (1-based)
+        if pos <= 0:           # If position is invalid
+            print("invalid position")  # Print error message
+            return
+        cur = self.head        # Start from the head
+        for i in range(pos - 1):   # Move to the (pos-1)th node
+            if cur.next == None:   # If next node does not exist
+                break
+            cur = cur.next        # Move to the next node
+        else:
+            return cur           # Return the node at the position
+
+    def display(self):          # Display the list
+        if self.head is None:   # If the list is empty
+            print("empty")      # Print "empty"
+            return
+        cur = self.head         # Start from the head
+        while cur:              # Traverse until the end
+            print(cur.data, end="->")  # Print current node's data
+            cur = cur.next      # Move to the next node
+
+    def pos_insert(self, data, pos):  # Insert a node at a specific position
+        if pos == 1:            # If position is 1
+            self.b_insert(data) # Insert at the beginning
+            return
+        newnode = Node(data)    # Create a new node
+        cur = self.position(pos - 1)  # Get the node before the position
+        if cur:                 # If the position exists
+            newnode.next = cur.next   # Set new node's next to current node's next
+            cur.next = newnode        # Set current node's next to new node
+        else:
+            print("position not found")  # Print error if position does not exist
+
+obj = Linked_list()         # Create a new linked list object
+
+obj.b_insert(10)            # Insert 10 at the beginning
+obj.e_insert(8)             # Insert 8 at the end
+obj.e_insert(36)            # Insert 36 at the end
+obj.display()               # Display the list
+print()                     # Print a newline
+obj.pos_insert(17, 4)       # Insert 17 at position 4
+obj.display()               # Display the list again
